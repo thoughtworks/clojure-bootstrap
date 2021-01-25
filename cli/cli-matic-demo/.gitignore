@@ -1,0 +1,18 @@
+# folders
+.calva
+.clj-kondo
+.cpcache
+.lsp
+.settings
+.vscode
+target
+tmp
+# files
+.classpath
+.eastwood
+.project
+cli-matic-demo
+pom.xml
+scrapbook.clj
+# local config files
+scripts/config/clj_env.sh
