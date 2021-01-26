@@ -1,6 +1,6 @@
 {:paths ["src"]
 
- :deps {org.clojure/clojure {:mvn/version "1.10.1"}
+ :deps {org.clojure/clojure {:mvn/version "1.10.2-rc3"}
         cli-matic/cli-matic {:mvn/version "0.4.3"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
@@ -8,11 +8,11 @@
 
  :aliases {:test {:test-paths  ["test" "src"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.732"}}}
-           :uberjar {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.2"}}
+           :uberjar {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.5"}}
                      :main-opts ["-m" "cambada.uberjar"
                                  "-m" "main"
                                  "--app-group-id" "cli-matic-demo"]}
-           :native-image {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.2"}}
+           :native-image {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.5"}}
                           :main-opts ["-m" "cambada.native-image"
                                       "-m" "main"
-                                      "--graalvm-opt -auto-fallback"]}}}
+                                      "--graalvm-opt -report-unsupported-elements-at-runtime"]}}}

@@ -1,6 +1,13 @@
 ## prerequisites
 If you want to experiment with native executables, please install GraalVM and the ```native-image``` extension instead of or alongside the Java SDK.
 
+For MacOS you can use [brew](https://brew.sh)
+```
+brew install graalvm-ce-java11
+sudo xattr -r -d com.apple.quarantine /Library/Java/JavaVirtualMachines/graalvm-ce-java11-21.0.0
+sudo /Library/Java/JavaVirtualMachines/graalvm-ce-java11-21.0.0/Contents/Home/bin/gu install native-image
+```
+
 ## commands available
 
 All the shell scripts inside the ```scripts``` folder can be run setting a number of environment variables.
