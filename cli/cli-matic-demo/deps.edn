@@ -1,6 +1,6 @@
 {:paths ["src"]
 
- :deps {org.clojure/clojure {:mvn/version "1.10.2-rc3"}
+ :deps {org.clojure/clojure {:mvn/version "1.10.2"}
         cli-matic/cli-matic {:mvn/version "0.4.3"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
