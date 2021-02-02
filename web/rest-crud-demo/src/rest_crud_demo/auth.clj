@@ -1,12 +1,13 @@
 (ns rest-crud-demo.auth
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
+            [rest-crud-demo.models.user :refer [User]]
             [schema.core :as s]
             [buddy.core.mac :as mac]
             [buddy.core.codecs :as codecs]
             [clojure.string :as cstr]
             [taoensso.timbre :as log]
-            [rest-crud-demo.db.dbname :as db]
+            [toucan.db :as db]
             [rest-crud-demo.utils :refer [parse-int]]))
 
 ;; Increment auth-scheme to invalidate all tokens when authentication mechanism is changed
@@ -18,14 +19,14 @@
 ;; ***** Auth implementation ****************************************************
 
 (defn- encode [user]
-  (str (:uid user) ":"
+  (str (:id user) ":"
        (:login user) ":"
        (:role user) ":"
        auth-scheme ":"
        (+ (quot (System/currentTimeMillis) 1000) (* 60 60 24 7)))) ;; valid 7 days
 
 ;; Use password to create token to invalidate it when password changes
-(defn- sign [msg password]
+(defn sign [msg password]
   (-> (mac/hash msg {:key (str secret password) :alg :hmac+sha256})
       (codecs/bytes->hex)))
 
@@ -33,7 +34,7 @@
   (let [[payload token-sign] (cstr/split token #"\.")
         user (zipmap [:uid :login :role :auth :exp]
                      (cstr/split payload #":"))
-        passw (db/get-password (:uid user))]
+        passw (:password_hash (User (:uid user)))]
     (if (= token-sign (sign payload passw))
       user
       nil)))
@@ -99,7 +100,7 @@
     (POST "/login" []
       :body [credentials Credentials]
       :summary "Authorization"
-      (let [user (db/find-user credentials)]
+      (let [user (db/select-one User :login (:login credentials))]
         (if (not user)
           (ok {:ok false :msg "Invalid credentials"})
           (let [passw (:password user)

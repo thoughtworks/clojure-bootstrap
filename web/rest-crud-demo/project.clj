@@ -12,7 +12,6 @@
                  ; Database
                  [toucan "1.1.9"]
                  [org.postgresql/postgresql "42.2.4"]
-                 [yesql "0.5.3"]
                  [com.mchange/c3p0 "0.9.5.2"]
 
                  ; Password Hashing
