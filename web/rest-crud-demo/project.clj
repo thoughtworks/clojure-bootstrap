@@ -12,9 +12,20 @@
                  ; Database
                  [toucan "1.1.9"]
                  [org.postgresql/postgresql "42.2.4"]
+                 [yesql "0.5.3"]
+                 [com.mchange/c3p0 "0.9.5.2"]
 
                  ; Password Hashing
-                 [buddy/buddy-hashers "1.3.0"]]
+                 [buddy/buddy-hashers "1.3.0"]
+
+                 [org.clojure/tools.reader "1.2.2"]
+                 ;; log
+                 [com.taoensso/timbre "4.8.0"]]
   :main ^:skip-aot rest-crud-demo.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :ring {:handler rest-crud-demo.core/app}
+  :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]]
+                   :plugins [[lein-ring "0.12.5"]]
+                   :ring {:port 8080}}
+             :uberjar    {:aot :all
+                          :ring {:port 80}}})

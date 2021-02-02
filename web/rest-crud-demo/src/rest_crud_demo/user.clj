@@ -1,12 +1,13 @@
 (ns rest-crud-demo.user
   (:require [schema.core :as s]
             [rest-crud-demo.string-util :as str]
+            [rest-crud-demo.auth :refer :all]
             [rest-crud-demo.models.user :refer [User]]
             [buddy.hashers :as hashers]
             [clojure.set :refer [rename-keys]]
             [toucan.db :as db]
-            [ring.util.http-response :refer [created]]
             [ring.util.http-response :refer [created ok not-found]]
+            [compojure.api.meta :refer [restructure-param]]
             [compojure.api.sweet :refer [POST GET PUT DELETE]]))
 
 (defn valid-username? [name]
@@ -61,9 +62,12 @@
      :body [create-user-req UserRequestSchema]
      (create-user-handler create-user-req))
    (GET "/users" []
+     :auth-roles #{"any"}
+     :current-user user
      (get-users-handler))
    (GET "/users/:id" []
      :path-params [id :- s/Int]
+     :auth-roles #{"any"}
      (get-user-handler id))
    (PUT "/users/:id" []
      :path-params [id :- s/Int]
