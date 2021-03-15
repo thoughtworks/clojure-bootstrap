@@ -5,6 +5,7 @@
     [toucan.db :as db]
     [toucan.models :as models]
     [rest-crud-demo.auth :refer [auth-routes]]
+    [rest-crud-demo.hello :refer [hello-routes]]
     [compojure.api.sweet :refer [api routes]])
   (:gen-class))
 
@@ -27,7 +28,7 @@
     (models/set-root-namespace! 'rest-crud-demo.models)
     (api
       {:swagger swagger-config}
-      (apply routes auth-routes user-routes))))
+      (apply routes auth-routes user-routes hello-routes))))
 
 (defn -main
   [& args]
