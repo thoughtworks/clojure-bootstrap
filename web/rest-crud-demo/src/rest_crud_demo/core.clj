@@ -28,3 +28,7 @@
     (api
       {:swagger swagger-config}
       (apply routes auth-routes user-routes))))
+
+(defn -main
+  [& args]
+  (run-jetty app {:port 3000}))

@@ -4,13 +4,16 @@ FIXME: description
 
 ## Installation
 
-Download from http://example.com/FIXME.
+- Install (Leiningen)[https://leiningen.org/] as a package manager.
+- etc (TBD)
 
 ## Usage
 
-FIXME: explanation
+Running in local
 
-    $ java -jar rest-crud-demo-0.1.0-standalone.jar [args]
+```
+lein start
+```
 
 ## Options
 
