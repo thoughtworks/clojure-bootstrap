@@ -4,10 +4,40 @@ FIXME: description
 
 ## Installation
 
+### Dependencies
+
+- Install (Clojure)[https://clojure.org/guides/getting_started]
 - Install (Leiningen)[https://leiningen.org/] as a package manager.
-- etc (TBD)
+
+### Setup database
+
+We simply create a database using this script.
+
+```
+> createdb restful-crud
+
+> psql -d restful-crud
+
+restful-crud:> CREATE TABLE "user" (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(50) UNIQUE NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL
+              );
+CREATE TABLE
+
+restful-crud:>
+```
+
+It is possible to use a database migration tools such as Flyway. Please update this demo if you feel like it is a better way.
 
 ## Usage
+
+Run the REPL server
+
+```
+lein repl
+```
 
 Running in local
 
