@@ -24,15 +24,16 @@
    :data {:securityDefinitions {:api_key {:type "apiKey" :name "Authorization" :in "header"}}}})
 
 (def app
-  (do
-    (db/set-default-db-connection! db-spec)
-    (models/set-root-namespace! 'rest-crud-demo.models)
-    (api
-      {:swagger swagger-config}
-      (apply routes auth-routes user-routes hello-routes))))
+  (api
+   {:swagger swagger-config}
+   (apply routes auth-routes user-routes hello-routes)))
+
+(def app-server
+  (wrap-reload #'app))
 
 (defn -main
   [& args]
-  (run-jetty 
-    (wrap-reload #'app) 
-    {:port 3000}))
+  (do
+    (db/set-default-db-connection! db-spec)
+    (models/set-root-namespace! 'rest-crud-demo.models)
+    (run-jetty app-server {:port 3000})))

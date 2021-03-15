@@ -5,4 +5,4 @@
 (def hello-routes
   [(GET "/" []
     (ok {:success true
-         :welcome "hello"}))])
+         :welcome "hello world"}))])
