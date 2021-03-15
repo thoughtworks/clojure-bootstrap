@@ -2,6 +2,7 @@
   (:require
     [rest-crud-demo.user :refer [user-routes]]
     [ring.adapter.jetty :refer [run-jetty]]
+    [ring.middleware.reload :refer [wrap-reload]]
     [toucan.db :as db]
     [toucan.models :as models]
     [rest-crud-demo.auth :refer [auth-routes]]
@@ -32,4 +33,6 @@
 
 (defn -main
   [& args]
-  (run-jetty app {:port 3000}))
+  (run-jetty 
+    (wrap-reload #'app) 
+    {:port 3000}))

@@ -8,6 +8,7 @@
                  [prismatic/schema "1.1.9"]
                  [metosin/compojure-api "2.0.0-alpha31" :exclusions [frankiesardo/linked]]
                  [ring/ring-jetty-adapter "1.6.3"]
+                 [ring "1.9.0"]
 
                  ; Database
                  [toucan "1.1.9"]
@@ -22,7 +23,9 @@
                  [com.taoensso/timbre "4.8.0"]]
   :main ^:skip-aot rest-crud-demo.core
   :target-path "target/%s"
-  :ring {:handler rest-crud-demo.core/app}
+  :ring {:handler rest-crud-demo.core/app
+         :auto-refresh? true
+         :auto-reload? true}
   :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]]
                    :plugins [[lein-ring "0.12.5"]]
                    :ring {:port 8080}}
