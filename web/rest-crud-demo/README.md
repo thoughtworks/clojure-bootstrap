@@ -4,13 +4,46 @@ FIXME: description
 
 ## Installation
 
-Download from http://example.com/FIXME.
+### Dependencies
+
+- Install (Clojure)[https://clojure.org/guides/getting_started]
+- Install (Leiningen)[https://leiningen.org/] as a package manager.
+
+### Setup database
+
+We simply create a database using this script.
+
+```
+> createdb restful-crud
+
+> psql -d restful-crud
+
+restful-crud:> CREATE TABLE "users" (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(50) UNIQUE NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL
+              );
+CREATE TABLE
+
+restful-crud:>
+```
+
+It is possible to use a database migration tools such as Flyway. Please update this demo if you feel like it is a better way.
 
 ## Usage
 
-FIXME: explanation
+Run the REPL server
 
-    $ java -jar rest-crud-demo-0.1.0-standalone.jar [args]
+```
+lein repl
+```
+
+Running in local
+
+```
+lein run
+```
 
 ## Options
 
