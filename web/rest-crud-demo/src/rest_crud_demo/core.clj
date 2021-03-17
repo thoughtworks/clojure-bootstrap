@@ -12,7 +12,7 @@
 
 (def db-spec
   {:dbtype   "postgres"
-   :dbname   "postgres"
+   :dbname   "restful-crud"
    :user     "postgres"
    :password "abc123ABC"})
 

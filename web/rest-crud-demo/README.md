@@ -31,7 +31,7 @@ restful-crud:> CREATE TABLE "users" (
                 role VARCHAR(10) NOT NULL,
                 password_hash TEXT NOT NULL
               );
-
+CREATE TABLE
 restful-crud:>
 ```
 

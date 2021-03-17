@@ -16,10 +16,14 @@
 (defn valid-password? [password]
   (str/length-in-range? 5 50 password))
 
+(defn valid-role? [role]
+  (contains? #{:user :admin :poweruser} (keyword role)))
+
 (s/defschema UserRequestSchema
   {:username (s/constrained s/Str valid-username?)
    :password (s/constrained s/Str valid-password?)
-   :email (s/constrained s/Str str/email?)})
+   :email (s/constrained s/Str str/email?)
+   :role (s/constrained s/Str valid-role?)})
 
 (defn id->created [id]
   (created (str "/users/" id) {:id id}))
