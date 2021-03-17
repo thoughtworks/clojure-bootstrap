@@ -6,7 +6,7 @@
    [toucan.db :as db]
    [toucan.models :as models]
    [rest-crud-demo.controllers.auth :refer [auth-routes]]
-   [rest-crud-demo.hello :refer [hello-routes]]
+   [rest-crud-demo.controllers.hello :refer [hello-routes]]
    [compojure.api.sweet :refer [api routes]])
   (:gen-class))
 
