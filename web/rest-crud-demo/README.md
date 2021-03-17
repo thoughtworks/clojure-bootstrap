@@ -1,13 +1,13 @@
 # rest-crud-demo
 
-FIXME: description
+WIP - Template for Clojure REST API applications based on [this blog post](https://www.codementor.io/@tamizhvendan/developing-restful-apis-in-clojure-using-compojure-api-and-toucan-part-1-oc6yzsigc).
 
 ## Installation
 
 ### Dependencies
 
-- Install (Clojure)[https://clojure.org/guides/getting_started]
-- Install (Leiningen)[https://leiningen.org/] as a package manager.
+- Install [Leiningen](https://leiningen.org/).
+- Install [Docker](https://www.docker.com/).
 
 ### Setup database
 
