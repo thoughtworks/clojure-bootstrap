@@ -2,6 +2,7 @@
   (:require [schema.core :as s]
             [rest-crud-demo.utils.string-util :as str]
             [rest-crud-demo.controllers.auth :refer :all]
+            [rest-crud-demo.services.auth :refer :all]
             [rest-crud-demo.models.user :refer [User]]
             [buddy.hashers :as hashers]
             [clojure.set :refer [rename-keys]]
