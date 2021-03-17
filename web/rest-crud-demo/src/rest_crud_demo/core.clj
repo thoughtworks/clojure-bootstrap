@@ -7,6 +7,7 @@
    [toucan.models :as models]
    [rest-crud-demo.controllers.auth :refer [auth-routes]]
    [rest-crud-demo.controllers.hello :refer [hello-routes]]
+   [rest-crud-demo.controllers.default :refer [default-route]]
    [compojure.api.sweet :refer [api routes]])
   (:gen-class))
 
@@ -26,7 +27,7 @@
 (def app
   (api
    {:swagger swagger-config}
-   (apply routes auth-routes user-routes hello-routes)))
+   (apply routes auth-routes user-routes hello-routes default-route)))
 
 (def app-server
   (wrap-reload #'app))

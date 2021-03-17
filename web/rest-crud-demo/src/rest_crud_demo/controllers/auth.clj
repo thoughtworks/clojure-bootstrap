@@ -23,7 +23,7 @@
    :password s/Str})
 
 (def auth-routes
-  (context "/api/v1" []
+  (context "/api/v1/auth" []
     :tags ["auth"]
 
     (POST "/login" []
