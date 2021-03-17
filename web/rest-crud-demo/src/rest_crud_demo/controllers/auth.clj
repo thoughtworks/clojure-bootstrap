@@ -1,4 +1,4 @@
-(ns rest-crud-demo.auth
+(ns rest-crud-demo.controllers.auth
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
             [rest-crud-demo.models.user :refer [User]]
@@ -8,7 +8,7 @@
             [clojure.string :as cstr]
             [taoensso.timbre :as log]
             [toucan.db :as db]
-            [rest-crud-demo.utils :refer [parse-int]]))
+            [rest-crud-demo.utils.parse-utils :refer [parse-int]]))
 
 ;; Increment auth-scheme to invalidate all tokens when authentication mechanism is changed
 (def ^:private auth-scheme 1)

@@ -1,4 +1,4 @@
-(ns rest-crud-demo.string-util
+(ns rest-crud-demo.utils.string-util
   (:require [clojure.string :as str]))
 
 (def non-blank? (complement str/blank?))

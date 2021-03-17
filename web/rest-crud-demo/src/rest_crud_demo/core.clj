@@ -1,10 +1,10 @@
 (ns rest-crud-demo.core
   (:require
-    [rest-crud-demo.user :refer [user-routes]]
+    [rest-crud-demo.controllers.user :refer [user-routes]]
     [ring.adapter.jetty :refer [run-jetty]]
     [toucan.db :as db]
     [toucan.models :as models]
-    [rest-crud-demo.auth :refer [auth-routes]]
+    [rest-crud-demo.controllers.auth :refer [auth-routes]]
     [compojure.api.sweet :refer [api routes]])
   (:gen-class))
 

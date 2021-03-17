@@ -1,7 +1,7 @@
-(ns rest-crud-demo.user
+(ns rest-crud-demo.controllers.user
   (:require [schema.core :as s]
-            [rest-crud-demo.string-util :as str]
-            [rest-crud-demo.auth :refer :all]
+            [rest-crud-demo.utils.string-util :as str]
+            [rest-crud-demo.controllers.auth :refer :all]
             [rest-crud-demo.models.user :refer [User]]
             [buddy.hashers :as hashers]
             [clojure.set :refer [rename-keys]]
