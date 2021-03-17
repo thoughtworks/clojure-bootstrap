@@ -107,9 +107,11 @@
           (let [passw (:password_hash user)
                 payload (encode user)
                 token (str payload "." (sign payload passw))]
-            (ok {:ok true
-                 :user (dissoc user :password_hash)
-                 :token token})))))
+            (if (= passw (sign (:password credentials) (:password credentials)))
+              (ok {:ok true
+                   :user (dissoc user :password_hash)
+                   :token token})
+              (ok {:ok false :msg "Invalid credentials"}))))))
 
     (GET "/test-auth-admin" []
       :auth-roles #{"admin"} ;; same as :middleware [[require-roles #{"admin"}]]
