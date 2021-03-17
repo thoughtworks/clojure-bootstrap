@@ -73,7 +73,6 @@
                        (not-expire?))]
       (if-not user
         (unauthorized "Unauthorized")
-        (println (str user))
         (if-not (has-role? (:role user) roles)
           (forbidden "Permission denied")
           (let [request (assoc request :identity user)]
