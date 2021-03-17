@@ -20,7 +20,10 @@
 
                  [org.clojure/tools.reader "1.2.2"]
                  ;; log
-                 [com.taoensso/timbre "4.8.0"]]
+                 [com.taoensso/timbre "4.8.0"]
+
+                 ;; test
+                 [ring/ring-mock "0.4.0"]]
   :main ^:skip-aot rest-crud-demo.core
   :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010"]
   :target-path "target/%s"
