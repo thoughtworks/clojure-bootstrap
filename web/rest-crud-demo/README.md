@@ -11,20 +11,26 @@ FIXME: description
 
 ### Setup database
 
+Run PostgreSQL via Docker container.
+
+```
+docker run -p 5142:5142 --name clojure-bootstrap-db -e POSTGRES_PASSWORD=a-strong-password -d postgres
+```
+
 We simply create a database using this script.
 
 ```
-> createdb restful-crud
+> createdb restful-crud -h localhost -U postgres 
 
-> psql -d restful-crud
+> psql -d restful-crud -h localhost -U postgres
 
 restful-crud:> CREATE TABLE "users" (
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(50) UNIQUE NOT NULL,
                 email VARCHAR(255) UNIQUE NOT NULL,
+                role VARCHAR(10) NOT NULL,
                 password_hash TEXT NOT NULL
               );
-CREATE TABLE
 
 restful-crud:>
 ```
@@ -45,25 +51,21 @@ Running in local
 lein run
 ```
 
-## Options
+## Manual Tests
 
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
+1. Point your browser to the [Swagger UI](http://localhost:8080/swagger/index.html).
+2. Create a new user via POST on /users.
+3. Login on /api/v1/login. Copy the token in the response.
+4. Click on the Swagger UI Authorize button. Paste the token and click on Authorize.
+5. Retrieve users via GET on /users.
 
 ### Bugs
 
 ...
 
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
 
-Copyright © 2021 FIXME
+Copyright © 2021 ThoughtWorks Inc
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
