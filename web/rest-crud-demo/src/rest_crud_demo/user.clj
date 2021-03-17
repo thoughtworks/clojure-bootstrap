@@ -25,7 +25,7 @@
   (created (str "/users/" id) {:id id}))
 
 (defn canonicalize-user-req [user-req]
-  (-> (update user-req :password #(sign user-req %))
+  (-> (update user-req :password #(sign (str user-req) %))
       (rename-keys {:password :password_hash})))
 
 (defn create-user-handler [create-user-req]

@@ -21,6 +21,7 @@
                  ;; log
                  [com.taoensso/timbre "4.8.0"]]
   :main ^:skip-aot rest-crud-demo.core
+  :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010"]
   :target-path "target/%s"
   :ring {:handler rest-crud-demo.core/app}
   :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]]

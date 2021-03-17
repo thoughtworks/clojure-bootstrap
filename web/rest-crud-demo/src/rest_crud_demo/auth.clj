@@ -20,7 +20,7 @@
 
 (defn- encode [user]
   (str (:id user) ":"
-       (:login user) ":"
+       (:username user) ":"
        (:role user) ":"
        auth-scheme ":"
        (+ (quot (System/currentTimeMillis) 1000) (* 60 60 24 7)))) ;; valid 7 days
@@ -32,9 +32,10 @@
 
 (defn- parse-token [token]
   (let [[payload token-sign] (cstr/split token #"\.")
-        user (zipmap [:uid :login :role :auth :exp]
+        user (zipmap [:id :username :role :auth :exp]
                      (cstr/split payload #":"))
-        passw (:password_hash (User (:uid user)))]
+        id (Integer/parseInt (:id user))
+        passw (:password_hash (User id))]
     (if (= token-sign (sign payload passw))
       user
       nil)))
@@ -72,6 +73,7 @@
                        (not-expire?))]
       (if-not user
         (unauthorized "Unauthorized")
+        (println (str user))
         (if-not (has-role? (:role user) roles)
           (forbidden "Permission denied")
           (let [request (assoc request :identity user)]
@@ -100,14 +102,14 @@
     (POST "/login" []
       :body [credentials Credentials]
       :summary "Authorization"
-      (let [user (db/select-one User :login (:login credentials))]
+      (let [user (db/select-one User :username (:login credentials))]
         (if (not user)
           (ok {:ok false :msg "Invalid credentials"})
-          (let [passw (:password user)
+          (let [passw (:password_hash user)
                 payload (encode user)
                 token (str payload "." (sign payload passw))]
             (ok {:ok true
-                 :user (dissoc user :password)
+                 :user (dissoc user :password_hash)
                  :token token})))))
 
     (GET "/test-auth-admin" []
