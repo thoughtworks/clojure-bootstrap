@@ -57,6 +57,12 @@ lein ring server-headless
 lein test
 ```
 
+## Test Coverage
+
+```
+lein cloverage
+```
+
 ## Manual Tests
 
 1. Point your browser to the [Swagger UI](http://localhost:8080/swagger/index.html).

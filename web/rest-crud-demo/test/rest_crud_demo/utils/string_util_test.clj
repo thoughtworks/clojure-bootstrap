@@ -4,7 +4,8 @@
                                                       max-length?
                                                       non-blank-with-max-length?
                                                       min-length?
-                                                      length-in-range?]]))
+                                                      length-in-range?
+                                                      email?]]))
 
 (deftest string-util-test
   (testing "should identify non blank strings"
@@ -30,5 +31,14 @@
     (is (= true (length-in-range? 2 5 "12345")))
     (is (= false (length-in-range? 2 5 "1")))
     (is (= false (length-in-range? 2 5 "123456"))))
-)
-  
+  (testing "should validate email"
+    (is (= true (email? "joe@example.com")))
+    (is (= true (email? "joe@example.com.br")))
+    (is (= true (email? "joe@example.co")))
+    (is (= true (email? "joe@example.net")))
+    (is (= false (email? "@example.com"))))
+    (is (= false (email? "joe@example")))
+    (is (= false (email? "joe.example.com")))
+    (is (= false (email? "joeexample.com")))
+    (is (= true (email? "joe+jane@example.com")))
+  )
