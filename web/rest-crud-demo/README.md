@@ -48,7 +48,7 @@ lein repl
 Running in local
 
 ```
-lein run
+lein ring server-headless
 ```
 
 ## Manual Tests
