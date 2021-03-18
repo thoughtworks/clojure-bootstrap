@@ -51,6 +51,12 @@ Running in local
 lein ring server-headless
 ```
 
+## Automated Tests
+
+```
+lein test
+```
+
 ## Manual Tests
 
 1. Point your browser to the [Swagger UI](http://localhost:8080/swagger/index.html).
