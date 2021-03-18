@@ -31,7 +31,8 @@
          :auto-refresh? true
          :auto-reload? true}
   :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]]
-                   :plugins [[lein-ring "0.12.5"]]
+                   :plugins [[lein-ring "0.12.5"]
+                             [lein-cloverage "1.2.2"]]
                    :ring {:adapter {:port 8080}}}
              :uberjar    {:aot :all
                           :ring {:adapter {:port 80}}}})
