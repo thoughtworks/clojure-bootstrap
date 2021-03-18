@@ -41,5 +41,4 @@
     (is (= false (email? "joe.example.com")))
     (is (= false (email? "joeexample.com")))
     (is (= false (email? 1234)))
-    (is (= true (email? "joe+jane@example.com")))
-  )
+    (is (= true (email? "joe+jane@example.com"))))
