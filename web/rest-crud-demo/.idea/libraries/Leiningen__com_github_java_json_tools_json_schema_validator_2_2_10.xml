@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: com.github.java-json-tools/json-schema-validator:2.2.10">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/github/java-json-tools/json-schema-validator/2.2.10/json-schema-validator-2.2.10.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: org.eclipse.jetty/jetty-http:9.2.21.v20170120">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-http/9.2.21.v20170120/jetty-http-9.2.21.v20170120.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
