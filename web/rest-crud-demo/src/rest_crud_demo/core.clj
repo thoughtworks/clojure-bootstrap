@@ -32,9 +32,8 @@
 (def app-server
   (wrap-reload #'app))
 
-(defn -main
-  [& args]
+(def init
   (do
     (db/set-default-db-connection! db-spec)
     (models/set-root-namespace! 'rest-crud-demo.models)
-    (run-jetty app-server {:port 8080})))
+    app-server))

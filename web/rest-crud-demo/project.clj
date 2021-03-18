@@ -27,11 +27,11 @@
   :main ^:skip-aot rest-crud-demo.core
   :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010"]
   :target-path "target/%s"
-  :ring {:handler rest-crud-demo.core/app
+  :ring {:handler rest-crud-demo.core/init
          :auto-refresh? true
          :auto-reload? true}
   :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]]
                    :plugins [[lein-ring "0.12.5"]]
-                   :ring {:port 8080}}
+                   :ring {:adapter {:port 8080}}}
              :uberjar    {:aot :all
-                          :ring {:port 80}}})
+                          :ring {:adapter {:port 80}}}})
