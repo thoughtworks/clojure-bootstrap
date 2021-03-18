@@ -7,7 +7,6 @@
                  ; Web
                  [prismatic/schema "1.1.9"]
                  [metosin/compojure-api "2.0.0-alpha31" :exclusions [frankiesardo/linked]]
-                 [ring/ring-jetty-adapter "1.6.3"]
                  [ring "1.9.0"]
 
                  ; Database
@@ -25,7 +24,7 @@
                  ;; test
                  [ring/ring-mock "0.4.0"]]
   :main ^:skip-aot rest-crud-demo.core
-  :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010"]
+;;   :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010"]
   :target-path "target/%s"
   :ring {:handler rest-crud-demo.core/init
          :auto-refresh? true

@@ -1,7 +1,6 @@
 (ns rest-crud-demo.core
   (:require
    [rest-crud-demo.controllers.user :refer [user-routes]]
-   [ring.adapter.jetty :refer [run-jetty]]
    [ring.middleware.reload :refer [wrap-reload]]
    [toucan.db :as db]
    [toucan.models :as models]

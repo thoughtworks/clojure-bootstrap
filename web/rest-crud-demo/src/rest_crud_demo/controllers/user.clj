@@ -8,6 +8,7 @@
                                                   update-user-handler
                                                   delete-user-handler
                                                   UserRequestSchema]]            
+            [toucan.db :as db]
             [compojure.api.sweet :refer [POST GET PUT DELETE context]]))
 
 (def user-routes
@@ -16,11 +17,11 @@
 
     [(POST "/users" []
        :body [create-user-req UserRequestSchema]
-       (create-user-handler create-user-req))
+       (create-user-handler create-user-req db/insert!))
      (GET "/users" []
        :auth-roles #{"any"}
        :current-user user
-       (get-users-handler))
+       (get-users-handler db/select))
      (GET "/users/:id" []
        :path-params [id :- s/Int]
        :auth-roles #{"any"}
@@ -28,8 +29,8 @@
      (PUT "/users/:id" []
        :path-params [id :- s/Int]
        :body [update-user-req UserRequestSchema]
-       (update-user-handler id update-user-req))
+       (update-user-handler id update-user-req db/update!))
      (DELETE "/users/:id" []
        :path-params [id :- s/Int]
-       (delete-user-handler id))]))
+       (delete-user-handler id db/delete!))]))
 

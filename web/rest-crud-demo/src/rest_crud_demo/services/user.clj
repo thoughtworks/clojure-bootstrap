@@ -4,8 +4,7 @@
             [rest-crud-demo.utils.string-util :as str]
             [schema.core :as s]
             [buddy.hashers :as hashers]
-            [clojure.set :refer [rename-keys]]
-            [toucan.db :as db]
+            [clojure.set :refer [rename-keys]]            
             [ring.util.http-response :refer [created ok not-found]]
             [compojure.api.meta :refer [restructure-param]]))
 
@@ -31,9 +30,9 @@
   (-> (update user-req :password #(sign (str (:password user-req)) %))
       (rename-keys {:password :password_hash})))
 
-(defn create-user-handler [create-user-req]
+(defn create-user-handler [create-user-req db-insert]
   (->> (canonicalize-user-req create-user-req)
-       (db/insert! User)
+       (db-insert User)
        :id
        id->created))
 
@@ -47,15 +46,15 @@
       (dissoc :password_hash)
       user->response))
 
-(defn get-users-handler []
-  (->> (db/select User)
+(defn get-users-handler [db-select]
+  (->> (db-select User)
        (map #(dissoc % :password_hash))
        ok))
 
-(defn update-user-handler [id update-user-req]
-  (db/update! User id (canonicalize-user-req update-user-req))
+(defn update-user-handler [id update-user-req db-update]
+  (db-update User id (canonicalize-user-req update-user-req))
   (ok))
 
-(defn delete-user-handler [user-id]
-  (db/delete! User :id user-id)
+(defn delete-user-handler [user-id db-delete]
+  (db-delete User :id user-id)
   (ok))
