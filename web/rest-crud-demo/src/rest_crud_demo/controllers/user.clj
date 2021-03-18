@@ -2,7 +2,12 @@
   (:require [schema.core :as s]
             [rest-crud-demo.controllers.auth :refer :all]
             [rest-crud-demo.services.auth :refer :all]            
-            [rest-crud-demo.services.user :refer :all]            
+            [rest-crud-demo.services.user :refer [get-users-handler
+                                                  create-user-handler
+                                                  get-user-handler
+                                                  update-user-handler
+                                                  delete-user-handler
+                                                  UserRequestSchema]]            
             [compojure.api.sweet :refer [POST GET PUT DELETE context]]))
 
 (def user-routes
