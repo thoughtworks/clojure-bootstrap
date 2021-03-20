@@ -4,8 +4,8 @@
             [rest-crud-demo.services.user :refer [valid-username?
                                                   valid-password?
                                                   valid-role?
-                                                  id->created
-                                                  create-user-handler]]))
+                                                  create-user-handler
+                                                  get-user-handler]]))
 
 (deftest user-test
   (testing "should validate username"
@@ -25,13 +25,13 @@
     (is (= true (valid-role? "poweruser")))
     (is (= false (valid-role? "")))
     (is (= false (valid-role? "anything else"))))
-  (testing "should return created id"
-    (is (= {:status 201 :headers {"Location" "/users/10"} :body {:id 10}}
-           (id->created 10)))
-    (is (= {:status 201 :headers {"Location" "/users/"} :body {:id nil}}
-           (id->created nil))))
   (testing "should handle user creation"
     (is (= {:status 201 :headers {"Location" "/users/10"} :body {:id 10}}
            (create-user-handler {:username "username" :password "password"}
-                                #(-> (assoc %2 :id 10))))))
-  )
+                                #(-> (assoc %2 :id 10))
+                                nil))))
+  (testing "should handle user retrieval"
+    (is (= {:status 200 :headers {} :body {:id 10}}
+           (get-user-handler 10 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}]))))))))
+    (is (= {:status 404 :headers {} :body nil}
+           (get-user-handler 11 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}]))))))))

@@ -1,6 +1,5 @@
 (ns rest-crud-demo.services.user
-  (:require [rest-crud-demo.models.user :refer [User]]
-            [rest-crud-demo.services.auth :refer :all]
+  (:require [rest-crud-demo.services.auth :refer :all]
             [rest-crud-demo.utils.string-util :as str]
             [schema.core :as s]
             [buddy.hashers :as hashers]
@@ -23,38 +22,38 @@
    :email (s/constrained s/Str str/email?)
    :role (s/constrained s/Str valid-role?)})
 
-(defn id->created [id]
+(defn- id->created [id]
   (created (str "/users/" id) {:id id}))
 
 (defn- canonicalize-user-req [user-req]
   (-> (update user-req :password #(sign (str (:password user-req)) %))
       (rename-keys {:password :password_hash})))
 
-(defn create-user-handler [create-user-req db-insert]
+(defn create-user-handler [create-user-req db-insert user-model]
   (->> (canonicalize-user-req create-user-req)
-       (db-insert User)
+       (db-insert user-model)
        :id
        id->created))
 
-(defn user->response [user]
+(defn- user->response [user]
   (if user
     (ok user)
     (not-found)))
 
-(defn get-user-handler [user-id]
-  (-> (User user-id)
+(defn get-user-handler [user-id user-model]
+  (-> (user-model user-id)
       (dissoc :password_hash)
       user->response))
 
-(defn get-users-handler [db-select]
-  (->> (db-select User)
+(defn get-users-handler [db-select user-model]
+  (->> (db-select user-model)
        (map #(dissoc % :password_hash))
        ok))
 
-(defn update-user-handler [id update-user-req db-update]
-  (db-update User id (canonicalize-user-req update-user-req))
+(defn update-user-handler [id update-user-req db-update user-model]
+  (db-update user-model id (canonicalize-user-req update-user-req))
   (ok))
 
-(defn delete-user-handler [user-id db-delete]
-  (db-delete User :id user-id)
+(defn delete-user-handler [user-id db-delete user-model]
+  (db-delete user-model :id user-id)
   (ok))
