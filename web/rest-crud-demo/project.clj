@@ -26,6 +26,7 @@
   :main ^:skip-aot rest-crud-demo.core
 ;;   :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010"]
   :target-path "target/%s"
+  :cloverage {:ns-exclude-regex [#"rest-crud-demo.models.*"]}
   :ring {:handler rest-crud-demo.core/init
          :auto-refresh? true
          :auto-reload? true}
