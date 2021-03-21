@@ -5,7 +5,8 @@
                                                   valid-password?
                                                   valid-role?
                                                   create-user-handler
-                                                  get-user-handler]]))
+                                                  get-user-handler
+                                                  get-users-handler]]))
 
 (deftest user-test
   (testing "should validate username"
@@ -32,6 +33,14 @@
                                 nil))))
   (testing "should handle user retrieval"
     (is (= {:status 200 :headers {} :body {:id 10}}
-           (get-user-handler 10 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}]))))))))
+           (get-user-handler 10 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}])))))))
     (is (= {:status 404 :headers {} :body nil}
-           (get-user-handler 11 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}]))))))))
+           (get-user-handler 11 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}])))))))
+    )
+  (testing "should handle all users retrieval"
+    (is (= {:status 200 :headers {} :body [{:id 10} {:id 11}]}
+           (get-users-handler #(-> %) [{:id 10 :password_hash "abc123"}
+                                       {:id 11 :password_hash "123abc"}])))
+    (is (= {:status 200 :headers {} :body []}
+           (get-users-handler #(-> %) []))))
+  )
