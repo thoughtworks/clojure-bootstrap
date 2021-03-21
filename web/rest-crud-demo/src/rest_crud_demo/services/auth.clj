@@ -27,18 +27,18 @@
   (-> (mac/hash msg {:key (str secret password) :alg :hmac+sha256})
       (codecs/bytes->hex)))
 
-(defn- parse-token [token]
-  (let [[payload token-sign] (cstr/split token #"\.")
+(defn- parse-token [token model]
+  (let [[payload token-sign] (cstr/split token #"\.")        
         user (zipmap [:id :username :role :auth :exp]
                      (cstr/split payload #":"))
         id (Integer/parseInt (:id user))
-        passw (:password_hash (User id))]
+        passw (:password_hash (model id))]
     (if (= token-sign (sign payload passw))
       user
       nil)))
 
 (defn- parse-header [request token-name]
-  (some->> (some-> (find-header request "authorization")
+  (some->> (some-> (find-header request token-name)
                    (second))))
 
 (defn- valid-auth-scheme? [user]
@@ -61,15 +61,15 @@
         matched-roles (clojure.set/intersection has-roles required-roles)]
     (not (empty? matched-roles))))
 
-(defn require-roles [handler roles]
+(defn require-roles [handler roles model]
   (fn [request]
     (let [user (some-> (parse-header request "authorization")
-                       (parse-token)
+                       (parse-token model)
                        (valid-auth-scheme?)
                        (not-expire?))]
       (if-not user
         (unauthorized "Unauthorized")
         (if-not (has-role? (:role user) roles)
           (forbidden "Permission denied")
-          (let [request (assoc request :identity user)]
+          (let [request (assoc request :identity user)]            
             (handler request)))))))

@@ -2,7 +2,9 @@
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
             [rest-crud-demo.models.user :refer [User]]
-            [rest-crud-demo.services.auth :refer :all]
+            [rest-crud-demo.services.auth :refer [require-roles
+                                                  encode
+                                                  sign]]
             [schema.core :as s]            
             [toucan.db :as db]))
 
@@ -10,7 +12,7 @@
 
 (defmethod compojure.api.meta/restructure-param :auth-roles
   [_ required-roles acc]
-  (update-in acc [:middleware] conj [require-roles required-roles]))
+  (update-in acc [:middleware] conj [#(require-roles %1 %2 User) required-roles]))
 
 (defmethod compojure.api.meta/restructure-param :current-user
   [_ binding acc]
@@ -42,7 +44,7 @@
               (ok {:ok false :msg "Invalid credentials"}))))))
 
     (GET "/test-auth-admin" []
-      :auth-roles #{"admin"} ;; same as :middleware [[require-roles #{"admin"}]]
+      :auth-roles #{"admin"};; same as :middleware [[require-roles #{"admin"}]]
       :current-user user
       (ok user))
 
