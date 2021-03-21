@@ -12,9 +12,11 @@
              (encode {:id 10
                       :username "user"
                       :role "admin"})))))
+  
   (testing "should sign message with password"
     (is (= "f109dbd1c8e124e9e0bbba2116bb167da7d607672d12a58cdd6ea15e637585ce"
            (sign "a message" "a password"))))
+  
   (testing "should allow access to resource for admin user"
     (let [middleware (require-roles #(-> %) #{"admin"} #(get {3 {:password_hash "f9480456ebc3a3259592d1affa832643c3f7e29c3cf5f8afcfeaa62fb84f1d85"}} %))
           authorized-response (middleware {:headers 
@@ -24,10 +26,34 @@
               :identity
               {:id "3", :username "user", :role "admin", :auth "1", :exp "1616907904"}}
              authorized-response))))
+  
+  (testing "should allow access to resource for power user"
+    (let [middleware (require-roles #(-> %) #{"poweruser"} #(get {3 {:password_hash "f9480456ebc3a3259592d1affa832643c3f7e29c3cf5f8afcfeaa62fb84f1d85"}} %))
+          authorized-response (middleware {:headers
+                                           {"Authorization" "3:user:poweruser:1:1616913654.59f4a451a11f4998e70780528e8f232b6fd910c34f20a949e70a4e0353a5dffc"}})]
+      (is (= {:headers
+              {"Authorization" "3:user:admin:1:1616907904.014fd2c1c2ab87a484a8d9da971825d1a91d3f0f9e355315619e7f6171591a98"}
+              :identity
+              {:id "3", :username "user", :role "poweruser", :auth "1", :exp "1616907904"}}
+             authorized-response))))
+  
+  (testing "should not allow access to resource for admin user with invalid password in token"
+    (let [middleware (require-roles #(-> %) #{"admin"} #(get {3 {:password_hash "f9480456ebc3a3259592d1affa832643c3f7e29c3cf5f8afcfeaa62fb84f1d85"}} %))
+          unauthorized-response (middleware {:headers
+                                           {"Authorization" "3:user:admin:1:1616907904.014fd2c1c2ab87a484a8d9da971825d1a91d3f0f9e355315619e7f6171591000"}})]
+      (is (= {:status 401 :headers {} :body "Unauthorized"} unauthorized-response))))
+  
+  (testing "should not allow access to resource for admin user with invalid auth scheme in token"
+    (let [middleware (require-roles #(-> %) #{"admin"} #(get {3 {:password_hash "f9480456ebc3a3259592d1affa832643c3f7e29c3cf5f8afcfeaa62fb84f1d85"}} %))
+          unauthorized-response (middleware {:headers
+                                             {"Authorization" "3:user:admin:2:1616907904.014fd2c1c2ab87a484a8d9da971825d1a91d3f0f9e355315619e7f6171591a98"}})]
+      (is (= {:status 401 :headers {} :body "Unauthorized"} unauthorized-response))))
+  
   (testing "should not allow access to unauthorized user"
     (let [middleware (require-roles #(-> "do nothing handler") #{"admin"} #(get {3 {:password_hash "f9480456ebc3a3259592d1affa832643c3f7e29c3cf5f8afcfeaa62fb84f1d85"}} %))
           unauthorized-response (middleware {})]
       (is (= {:status 401 :headers {} :body "Unauthorized"} unauthorized-response))))
+  
   (testing "should not allow access to forbidden resource"
     (let [middleware (require-roles #(-> "do nothing handler") #{"admin"} #(get {2 {:password_hash "bfebc2fee6cd4d3ecc0285e8b811c6e1c73cc9bdea8853b52256c674edf8eb16"}} %))
           forbidden-response (middleware {:headers
