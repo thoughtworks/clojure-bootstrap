@@ -51,9 +51,11 @@
        ok))
 
 (defn update-user-handler [id update-user-req db-update user-model]
-  (db-update user-model id (canonicalize-user-req update-user-req))
-  (ok))
+  (if (db-update user-model id (canonicalize-user-req update-user-req))
+    (ok)
+    (not-found)))
 
 (defn delete-user-handler [user-id db-delete user-model]
-  (db-delete user-model :id user-id)
-  (ok))
+  (if (db-delete user-model :id user-id)
+    (ok)
+    (not-found)))

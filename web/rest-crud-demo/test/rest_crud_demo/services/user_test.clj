@@ -6,7 +6,9 @@
                                                   valid-role?
                                                   create-user-handler
                                                   get-user-handler
-                                                  get-users-handler]]))
+                                                  get-users-handler
+                                                  update-user-handler
+                                                  delete-user-handler]]))
 
 (deftest user-test
   (testing "should validate username"
@@ -29,13 +31,13 @@
   (testing "should handle user creation"
     (is (= {:status 201 :headers {"Location" "/users/10"} :body {:id 10}}
            (create-user-handler {:username "username" :password "password"}
-                                #(-> (assoc %2 :id 10))
-                                nil))))
+                                #(assoc %2 :id 10)
+                                 nil))))
   (testing "should handle user retrieval"
     (is (= {:status 200 :headers {} :body {:id 10}}
-           (get-user-handler 10 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}])))))))
+           (get-user-handler 10 (fn [id] (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}]))))))
     (is (= {:status 404 :headers {} :body nil}
-           (get-user-handler 11 (fn [id] (-> (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}])))))))
+           (get-user-handler 11 (fn [id] (first (filter #(= (:id %) id) [{:id 10 :password_hash "abc"}]))))))
     )
   (testing "should handle all users retrieval"
     (is (= {:status 200 :headers {} :body [{:id 10} {:id 11}]}
@@ -43,4 +45,24 @@
                                        {:id 11 :password_hash "123abc"}])))
     (is (= {:status 200 :headers {} :body []}
            (get-users-handler #(-> %) []))))
+  (testing "should handle user update"
+    (is (= {:status 200 :headers {} :body nil}
+           (update-user-handler 10
+                                {:username "username" :password "password"}
+                                (fn [model id _] (first (filter #(= (:id %) id) model)))
+                                [{:id 10}])))
+    (is (= {:status 404 :headers {} :body nil}
+           (update-user-handler 11
+                                {:username "username" :password "password"}
+                                (fn [model id _] (first (filter #(= (:id %) id) model)))
+                                [{:id 10}]))))
+    (testing "should handle user deletion"
+      (is (= {:status 200 :headers {} :body nil}
+             (delete-user-handler 10
+                                  (fn [model pk id] (first (filter #(= (pk %) id) model)))
+                                  [{:id 10}])))
+      (is (= {:status 404 :headers {} :body nil}
+             (delete-user-handler 11
+                                  (fn [model pk id] (first (filter #(= (pk %) id) model)))
+                                  [{:id 10}]))))
   )
