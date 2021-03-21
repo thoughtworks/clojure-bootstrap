@@ -32,10 +32,16 @@
           authorized-response (middleware {:headers
                                            {"Authorization" "3:user:poweruser:1:1616913654.59f4a451a11f4998e70780528e8f232b6fd910c34f20a949e70a4e0353a5dffc"}})]
       (is (= {:headers
-              {"Authorization" "3:user:admin:1:1616907904.014fd2c1c2ab87a484a8d9da971825d1a91d3f0f9e355315619e7f6171591a98"}
+              {"Authorization" "3:user:poweruser:1:1616913654.59f4a451a11f4998e70780528e8f232b6fd910c34f20a949e70a4e0353a5dffc"}
               :identity
-              {:id "3", :username "user", :role "poweruser", :auth "1", :exp "1616907904"}}
+              {:id "3", :username "user", :role "poweruser", :auth "1", :exp "1616913654"}}
              authorized-response))))
+  
+  (testing "should not allow access to resource for user with invalid role"
+    (let [middleware (require-roles #(-> %) #{"nobody"} #(get {3 {:password_hash "f9480456ebc3a3259592d1affa832643c3f7e29c3cf5f8afcfeaa62fb84f1d85"}} %))
+          unauthorized-response (middleware {:headers
+                                           {"Authorization" "3:user:nobody:1:1616913897.e50ee69bec6a627d409fe4894a32fd8d484a366a724db9b9516698e043fa4d61"}})]
+      (is (= {:status 403 :headers {} :body "Permission denied"} unauthorized-response))))
   
   (testing "should not allow access to resource for admin user with invalid password in token"
     (let [middleware (require-roles #(-> %) #{"admin"} #(get {3 {:password_hash "f9480456ebc3a3259592d1affa832643c3f7e29c3cf5f8afcfeaa62fb84f1d85"}} %))
