@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:13.2
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "restful-crud"
+      POSTGRES_PASSWORD: "abc123ABC"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - "5432:5432"
