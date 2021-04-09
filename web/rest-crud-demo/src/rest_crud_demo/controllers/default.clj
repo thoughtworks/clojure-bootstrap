@@ -4,5 +4,5 @@
 
 
 (def default-route
-  [(GET "/" []
-     (ok {:message "nothing to see here"}))])
+  (GET "/" []
+    (ok {:message "nothing to see here"})))

@@ -7,11 +7,11 @@
   (context "/api/v1/hello" []
     :tags ["hello"]
 
-    [(GET "/hello-world" []
-       (ok {:success true
-            :message "hello world"}))
-     
-     (GET "/ping" []
-       :query-params [message :- String]
-       (ok {:success true
-            :pong message}))]))
+    (GET "/hello-world" []
+      (ok {:success true
+           :message "hello world"}))
+
+    (GET "/ping" []
+      :query-params [message :- String]
+      (ok {:success true
+           :pong message}))))
