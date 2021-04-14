@@ -1,13 +1,14 @@
 (ns rest-crud-demo.core
-  (:require
-   [rest-crud-demo.controllers.user :as controllers-user]
-   [ring.middleware.reload :as mw-reload]
-   [toucan.db :as db]
-   [toucan.models :as models]
-   [rest-crud-demo.controllers.auth :as controllers-auth]
-   [rest-crud-demo.controllers.hello :as controllers-hello]
-   [rest-crud-demo.controllers.default :as controllers-default]
-   [compojure.api.sweet :as sweet])
+  (:require [ring.middleware.reload :as mw-reload]
+            [toucan.db :as db]
+            [toucan.models :as models]
+            [rest-crud-demo.config]
+            [compojure.api.sweet :as sweet]
+            [rest-crud-demo.models.user :refer [User]]
+            [rest-crud-demo.controllers.user :as controllers-user]
+            [rest-crud-demo.controllers.auth :as controllers-auth]
+            [rest-crud-demo.controllers.hello :as controllers-hello]
+            [rest-crud-demo.controllers.default :as controllers-default])
   (:gen-class))
 
 (def db-spec
@@ -26,11 +27,11 @@
 (def app
   (sweet/api
    {:swagger swagger-config}
-   (apply sweet/routes
-          controllers-auth/auth-routes
-          controllers-user/user-routes
-          controllers-hello/hello-routes
-          controllers-default/default-route)))
+   (sweet/routes
+     controllers-auth/auth-routes
+     controllers-user/user-routes
+     controllers-hello/hello-routes
+     controllers-default/default-route)))
 
 (def app-server
   (mw-reload/wrap-reload #'app))

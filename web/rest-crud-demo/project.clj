@@ -7,6 +7,7 @@
                  ; Web
                  [prismatic/schema "1.1.9"]
                  [metosin/compojure-api "2.0.0-alpha31" :exclusions [frankiesardo/linked]]
+
                  [ring "1.9.0"]
 
                  ; Database

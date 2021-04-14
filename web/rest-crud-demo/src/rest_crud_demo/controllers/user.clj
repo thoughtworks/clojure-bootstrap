@@ -1,7 +1,6 @@
 (ns rest-crud-demo.controllers.user
   (:require [schema.core :as s]
             [rest-crud-demo.models.user :refer [User]]
-            [rest-crud-demo.controllers.auth :refer :all]
             [rest-crud-demo.services.user :as user]
             [toucan.db :as db]
             [compojure.api.sweet :refer [POST GET PUT DELETE context]]))

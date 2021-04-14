@@ -1,6 +1,7 @@
 (ns rest-crud-demo.services.auth
   (:require [buddy.core.mac :as mac]
             [buddy.core.codecs :as codecs]
+            [clojure.set :as sets]
             [clojure.string :as cstr]
             [ring.util.http-response :as resp]
             [rest-crud-demo.utils.parse-utils :as parse]))
@@ -56,7 +57,7 @@
                     "poweruser" #{"any" "user" "poweruser"}
                     "user"      #{"any" "user"}
                     #{})
-        matched-roles (clojure.set/intersection has-roles required-roles)]
+        matched-roles (sets/intersection has-roles required-roles)]
     (not (empty? matched-roles))))
 
 (defn require-roles [handler roles model]

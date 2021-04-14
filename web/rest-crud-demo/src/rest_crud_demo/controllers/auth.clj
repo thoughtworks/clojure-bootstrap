@@ -2,23 +2,9 @@
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
             [rest-crud-demo.models.user :refer [User]]
-            [rest-crud-demo.services.auth :refer [require-roles
-                                                  encode
-                                                  sign]]
+            [rest-crud-demo.services.auth :as auth]
             [schema.core :as s]            
             [toucan.db :as db]))
-
-;; ***** Route helpers ********************************************************
-
-(defmethod compojure.api.meta/restructure-param :auth-roles
-  [_ required-roles acc]
-  (update-in acc [:middleware] conj [#(require-roles %1 %2 User) required-roles]))
-
-(defmethod compojure.api.meta/restructure-param :current-user
-  [_ binding acc]
-  (update-in acc [:letks] into [binding `(:identity ~'+compojure-api-request+)]))
-
-;; ***** API definition *******************************************************
 
 (s/defschema Credentials
   {:login s/Str
@@ -35,9 +21,9 @@
         (if (not user)
           (ok {:ok false :msg "Invalid credentials"})
           (let [passw (:password_hash user)
-                payload (encode user)
-                token (str payload "." (sign payload passw))]
-            (if (= passw (sign (:password credentials) (:password credentials)))
+                payload (auth/encode user)
+                token (str payload "." (auth/sign payload passw))]
+            (if (= passw (auth/sign (:password credentials) (:password credentials)))
               (ok {:ok true
                    :user (dissoc user :password_hash)
                    :token token})
