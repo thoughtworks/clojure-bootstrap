@@ -1,7 +1,9 @@
 (ns ^:figwheel-hooks fullstack-demo-ui.core
   (:require [reagent.dom :as rdom]
             [re-frame.core :as re-frame :refer [dispatch-sync
-                                                subscribe]]))
+                                                subscribe]]
+
+            [fullstack-demo-ui.system]))
 
 (defn header []
   (fn []
