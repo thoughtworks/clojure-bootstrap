@@ -1,0 +1,6 @@
+^{:watch-dirs ["src/cljs" "src/cljc"]}
+{:main          fullstack-demo-ui.core
+ :parallel-build true
+ :output-to     "resources/public/js/app.js"
+ :output-dir    "resources/public/js/out"
+ :optimizations :advanced}

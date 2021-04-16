@@ -1,0 +1,15 @@
+# Autodetect text files and force lf endings
+* text=auto eol=lf
+
+# Explicitly defined text files (autochecking can't screw em up)
+*.md text
+*.clj text
+*.cljs text
+*.cljc text
+*.yaml text
+*.json text
+*.edn
+
+# explicitly define binary files if autodetection fails for some reason
+*.jpg binary
+*.png binary

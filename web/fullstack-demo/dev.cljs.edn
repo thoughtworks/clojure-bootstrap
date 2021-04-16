@@ -1,0 +1,10 @@
+^{:watch-dirs   ["src/cljs" "src/cljc"]
+  :css-dirs     ["resources/public/css"]
+  :auto-testing false
+  :open-url     false}
+{:main           fullstack-demo-ui.core
+ :preloads       [re-frisk.preload
+                  devtools.preload]
+ :parallel-build true
+ :output-to      "resources/public/js/app.js"
+ :output-dir     "resources/public/js/out"}
