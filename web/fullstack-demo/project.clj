@@ -1,6 +1,6 @@
 (defproject fullstack-demo "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.10.3"]
-                 [org.clojure/clojurescript "1.10.844" :exclusions [org.clojure/tools.reader]]
+                 [org.clojure/clojurescript "1.10.773" :exclusions [org.clojure/tools.reader]]
                  [org.clojure/tools.reader "1.3.5"]
 
                  ; System level stuff
@@ -12,10 +12,10 @@
 
                  ; Server API stuff
                  [aleph "0.4.6" :exclusions [org.clojure/tools.logging]]
-                 [ring/ring-core "1.8.2"]
+                 [ring/ring-core "1.9.1"]
                  [ring/ring-anti-forgery "1.3.0"]
                  [compojure "1.6.2" :exclusions [ring/ring-codec]]
-                 [ring/ring-codec "1.1.2"]
+                 [ring/ring-codec "1.1.3"]
                  [metosin/jsonista "0.2.7"]
 
                  ; Server side libs
@@ -52,17 +52,18 @@
                                        [cljs-http "0.1.46" :exclusions [org.clojure/core.async
                                                                         com.cognitect/transit-cljs]]
                                        [com.cognitect/transit-cljs "0.8.264"]
-                                       [haslett "0.1.6"]
+                                       [haslett "0.1.6" :exclusions [org.clojure/clojurescript]]
                                        [com.andrewmcveigh/cljs-time "0.5.2"]]}
 
 
              :dev      {:dependencies   [[figwheel-sidecar "0.5.20" :exclusions [org.clojure/tools.nrepl]]
                                          [cider/piggieback "0.5.2"]
                                          [hawk "0.2.11"]
-                                         [org.clojure/tools.namespace "1.0.0"]
+                                         #_[org.clojure/tools.namespace "1.0.0"]
                                          [binaryage/devtools "1.0.2"]
                                          [day8.re-frame/test "0.1.5"]
-                                         [re-frisk "1.3.4" :exclusions [org.clojure/tools.analyzer]]
+                                         [re-frisk "1.3.4" :exclusions [org.clojure/tools.analyzer
+                                                                        org.clojure/clojurescript]]
                                          #_[clj-chrome-devtools "20200423"]]
                         :repl-options   {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
                         :source-paths   ["dev" "src/cljs"]

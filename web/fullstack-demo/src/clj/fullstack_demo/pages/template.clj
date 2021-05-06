@@ -1,6 +1,7 @@
 (ns fullstack-demo.pages.template
   (:require [hiccup.core :as html]
             [clojure.java.io :as io]
+            [ring.middleware.anti-forgery :as mw-af]
             [fullstack-demo.styles.main :as styles]
             [fullstack-demo.config :as conf]))
 
@@ -20,7 +21,7 @@
 (defn body [content]
   [:body
    [:span#csrf-token {:style           :none
-                      :data-csrf-token "lol-troll"}]
+                      :data-csrf-token mw-af/*anti-forgery-token*}]
    [:div#app]
    (if (conf/dev-mode?)
      [:script {:src "js/app.js"}]

@@ -2,8 +2,9 @@
   (:require [reagent.dom :as rdom]
             [re-frame.core :as re-frame :refer [dispatch-sync
                                                 subscribe]]
-
-            [fullstack-demo-ui.system]))
+            [fullstack-demo-ui.comms]
+            [fullstack-demo-ui.system]
+            fullstack-demo-ui.events))
 
 (defn header []
   (fn []
@@ -11,9 +12,16 @@
      [:p "Header"]]))
 
 (defn body []
-  (fn []
-    [:div#main
-     [:p "Hello world!"]]))
+  (let [hello-msgs (subscribe [:subscription/hello-responses])]
+    (fn []
+      [:div#main
+       [:p "Hello world!"]
+
+       [:ul
+        (map-indexed
+          (fn [idx msg]
+            [:li {:key (str idx "-" msg)} msg])
+          @hello-msgs)]])))
 
 (defn main-component []
   [:<>
