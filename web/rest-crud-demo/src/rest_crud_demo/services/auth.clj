@@ -1,11 +1,10 @@
 (ns rest-crud-demo.services.auth
   (:require [buddy.core.mac :as mac]
             [buddy.core.codecs :as codecs]
+            [clojure.set :as sets]
             [clojure.string :as cstr]
-            [taoensso.timbre :as log]
-            [ring.util.http-response :refer :all]
-            [rest-crud-demo.models.user :refer [User]]
-            [rest-crud-demo.utils.parse-utils :refer [parse-int]]))
+            [ring.util.http-response :as resp]
+            [rest-crud-demo.utils.parse-utils :as parse]))
 
 ;; Increment auth-scheme to invalidate all tokens when authentication mechanism is changed
 (def ^:private auth-scheme 1)
@@ -28,7 +27,7 @@
       (codecs/bytes->hex)))
 
 (defn- parse-token [token model]
-  (let [[payload token-sign] (cstr/split token #"\.")        
+  (let [[payload token-sign] (cstr/split token #"\.")
         user (zipmap [:id :username :role :auth :exp]
                      (cstr/split payload #":"))
         id (Integer/parseInt (:id user))
@@ -38,17 +37,17 @@
       nil)))
 
 (defn- parse-header [request token-name]
-  (some->> (some-> (find-header request token-name)
+  (some->> (some-> (resp/find-header request token-name)
                    (second))))
 
 (defn- valid-auth-scheme? [user]
-  (if (= (-> user :auth parse-int) auth-scheme)
+  (if (= (-> user :auth parse/parse-int) auth-scheme)
     user
     nil))
 
 (defn- not-expire? [user]
   (let [now (quot (System/currentTimeMillis) 1000)]
-    (if (< now (-> user :exp parse-int))
+    (if (< now (-> user :exp parse/parse-int))
       user
       nil)))
 
@@ -58,7 +57,7 @@
                     "poweruser" #{"any" "user" "poweruser"}
                     "user"      #{"any" "user"}
                     #{})
-        matched-roles (clojure.set/intersection has-roles required-roles)]
+        matched-roles (sets/intersection has-roles required-roles)]
     (not (empty? matched-roles))))
 
 (defn require-roles [handler roles model]
@@ -68,8 +67,8 @@
                        (valid-auth-scheme?)
                        (not-expire?))]
       (if-not user
-        (unauthorized "Unauthorized")
+        (resp/unauthorized "Unauthorized")
         (if-not (has-role? (:role user) roles)
-          (forbidden "Permission denied")
+          (resp/forbidden "Permission denied")
           (let [request (assoc request :identity user)]            
             (handler request)))))))

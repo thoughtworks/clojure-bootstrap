@@ -1,10 +1,9 @@
 (ns rest-crud-demo.services.user
-  (:require [rest-crud-demo.services.auth :refer :all]
+  (:require [rest-crud-demo.services.auth :as auth]
             [rest-crud-demo.utils.string-util :as str]
             [schema.core :as s]
-            [buddy.hashers :as hashers]
-            [clojure.set :refer [rename-keys]]            
-            [ring.util.http-response :refer [created ok not-found]]
+            [clojure.set :as sets]
+            [ring.util.http-response :as resp]
             [compojure.api.meta :refer [restructure-param]]))
 
 (defn valid-username? [name]
@@ -23,11 +22,11 @@
    :role (s/constrained s/Str valid-role?)})
 
 (defn- id->created [id]
-  (created (str "/users/" id) {:id id}))
+  (resp/created (str "/users/" id) {:id id}))
 
 (defn- canonicalize-user-req [user-req]
-  (-> (update user-req :password #(sign (str (:password user-req)) %))
-      (rename-keys {:password :password_hash})))
+  (-> (update user-req :password #(auth/sign (str (:password user-req)) %))
+      (sets/rename-keys {:password :password_hash})))
 
 (defn create-user-handler [create-user-req db-insert user-model]
   (->> (canonicalize-user-req create-user-req)
@@ -37,8 +36,8 @@
 
 (defn- user->response [user]
   (if user
-    (ok user)
-    (not-found)))
+    (resp/ok user)
+    (resp/not-found)))
 
 (defn get-user-handler [user-id user-model]
   (-> (user-model user-id)
@@ -48,14 +47,14 @@
 (defn get-users-handler [db-select user-model]
   (->> (db-select user-model)
        (map #(dissoc % :password_hash))
-       ok))
+       resp/ok))
 
 (defn update-user-handler [id update-user-req db-update user-model]
   (if (db-update user-model id (canonicalize-user-req update-user-req))
-    (ok)
-    (not-found)))
+    (resp/ok)
+    (resp/not-found)))
 
 (defn delete-user-handler [user-id db-delete user-model]
   (if (db-delete user-model :id user-id)
-    (ok)
-    (not-found)))
+    (resp/ok)
+    (resp/not-found)))

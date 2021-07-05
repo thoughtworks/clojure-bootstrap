@@ -3,7 +3,9 @@
             [ring.mock.request :as mock]
             [rest-crud-demo.core :refer :all]
             [rest-crud-demo.test-utils.utils :refer [parse-body]]
-            [rest-crud-demo.controllers.hello :as hello])
+
+    ; to register handlers
+            [rest-crud-demo.controllers.hello])
   (:gen-class))
 
 (deftest hello-world-test

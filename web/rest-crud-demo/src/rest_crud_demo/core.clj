@@ -1,13 +1,14 @@
 (ns rest-crud-demo.core
-  (:require
-   [rest-crud-demo.controllers.user :refer [user-routes]]
-   [ring.middleware.reload :refer [wrap-reload]]
-   [toucan.db :as db]
-   [toucan.models :as models]
-   [rest-crud-demo.controllers.auth :refer [auth-routes]]
-   [rest-crud-demo.controllers.hello :refer [hello-routes]]
-   [rest-crud-demo.controllers.default :refer [default-route]]
-   [compojure.api.sweet :refer [api routes]])
+  (:require [ring.middleware.reload :as mw-reload]
+            [toucan.db :as db]
+            [toucan.models :as models]
+            [rest-crud-demo.config]
+            [compojure.api.sweet :as sweet]
+            [rest-crud-demo.models.user :refer [User]]
+            [rest-crud-demo.controllers.user :as controllers-user]
+            [rest-crud-demo.controllers.auth :as controllers-auth]
+            [rest-crud-demo.controllers.hello :as controllers-hello]
+            [rest-crud-demo.controllers.default :as controllers-default])
   (:gen-class))
 
 (def db-spec
@@ -24,12 +25,16 @@
    :data {:securityDefinitions {:api_key {:type "apiKey" :name "Authorization" :in "header"}}}})
 
 (def app
-  (api
+  (sweet/api
    {:swagger swagger-config}
-   (apply routes auth-routes user-routes hello-routes default-route)))
+   (sweet/routes
+     controllers-auth/auth-routes
+     controllers-user/user-routes
+     controllers-hello/hello-routes
+     controllers-default/default-route)))
 
 (def app-server
-  (wrap-reload #'app))
+  (mw-reload/wrap-reload #'app))
 
 (def init
   (do
